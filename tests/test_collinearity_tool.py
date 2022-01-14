@@ -1,0 +1,1 @@
+from collinearity_tool import collinearity_tool
