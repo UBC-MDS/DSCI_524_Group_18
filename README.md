@@ -10,8 +10,11 @@ It relies on existing package, variance_inflation_factor() by _statsmodels_ [doc
 The output is a simple dataframe with two columns: feature (variable name) and VIF (VIF value).
 
 **scipy.stats.linregress**
-_Scipy_'s is another necessary package for this collinearity tool. This package conducts linear regression using `linregress` and provides necessary statistical information, including r-squared.
-For more information on the package, please see the following [documentation](https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.stats.linregress.html).
+Scipy is a necessary package for this collinearity tool. This package conducts linear regression using `linregress` and provides necessary statistical information, including r-squared. For more information on the package, please see the following [documentation](https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.stats.linregress.html).
+
+**Pandas**
+Pandas is another necessary package for this collinearity tool. This package conducts linear regression using `corr` and provides necessary statistical information, including r-squared values. The output is a DataFrame in the shape of a correlation matrix.
+For more information on the package, please see the following [documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.corr.html)).
 
 **Altair**
 _Altair_ is a popular plotting package. It provides the necessary tools to create the heatmap for the collinearity tool. For more information on Altair and heatmaps, please refer to this [example](https://altair-viz.github.io/gallery/simple_heatmap.html).
