@@ -6,7 +6,7 @@ def vif_bar_plot(x, y, df, thresh):
     Parameters
     ----------
     x : list
-        A list of the exploratory variables.
+        A list of the explanatory variables.
     y : str
         The response variable
     df : pandas.DataFrame
@@ -17,7 +17,7 @@ def vif_bar_plot(x, y, df, thresh):
     Returns
     -------
     list
-        A list containing a dataframe for VIFs and Bar chart of the VIFs for each explanatory variable alongside the threshold.
+        A list containing a dataframe for VIFs and a bar chart of the VIFs for each explanatory variable alongside the threshold.
     
     Examples
     --------
