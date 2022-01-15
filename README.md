@@ -1,4 +1,5 @@
 # collinearity_tool
+Identify multicollinearity issues by correlation, VIF, and visualizations. This package is designed for beginners of Python who want to identify multicollinearity issues by applying a simple function. It automates the process of building a proper correlation matrix, creating correlation heat map and identifying pairwise highly correlated variables. An R version of package is also in the progress of development.
 
 ## Functions 
 
