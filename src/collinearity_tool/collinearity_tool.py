@@ -1,3 +1,7 @@
+import altair as alt
+import numpy as np
+import pandas as pd
+
 def corr_matrix(df):
     """Select all numeric variables and calculate
     Pearson correlation coefficient pairwise. The output
