@@ -1,3 +1,5 @@
+import pandas as pd
+
 def corr_matrix(df):
     """Select all numeric variables and calculate
     Pearson correlation coefficient pairwise. The output
@@ -20,6 +22,10 @@ def corr_matrix(df):
     >>> from collinearity_tool.collinearity_tool import corr_matrix
     >>> corr_df = corr_matrix(df)
     """
+    numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+    n_df = df.select_dtypes(include=numerics)
+    corr = n_df.corr()
+    return corr
 
     
 def corr_heatmap(df):
