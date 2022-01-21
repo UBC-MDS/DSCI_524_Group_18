@@ -22,7 +22,7 @@ def corr_matrix(df):
     """
 
     
-def corr_heatmap(df):
+def corr_heatmap(df, response, scheme='blueorange'):
     """Plot rectangular data as a color-encoded Pearson correlaiton matrix.
 
     The rows and the columns contain variable names, while the heatmap tiles 
@@ -31,19 +31,48 @@ def corr_heatmap(df):
     Parameters
     ----------
     df : pandas.DataFrame 
-        2D dataset that can be coerced into an ndarray. The index/column information 
-        will be used to label the columns and rows.
+        2D dataset that can be coerced into an ndarray.
+    response: str
+        the column name of the response 
+    scheme : str
+        the diverging vega scheme from https://vega.github.io/vega/docs/schemes/#diverging
+        the default is 'blueorange'
 
     Returns
     -------
-    ax : matplotlib Axes
-        Axes object with the heatmap.
+    altair.LayerChart
+        A aitair chart with text layer
     
     Examples
     --------
     >>> from collinearity_tool.collinearity_tool import corr_heatmap
     >>> corr_heatmap(df)
     """
+
+    cor_data = df.drop(columns=response).corr().stack().reset_index().rename(
+        columns={'level_0': 'variable1', 'level_1': 'variable2', 0: 'correlation'})
+    cor_data['correlation_round'] = cor_data['correlation'].map(
+        '{:.2f}'.format)
+
+    heatmap = alt.Chart(cor_data).mark_rect().encode(
+        x=alt.X('variable1:O', title=''),
+        y=alt.Y('variable2:O', title=''),
+        color=alt.Color('correlation:Q', scale=alt.Scale(
+            scheme='blueorange', domain=[-1, 1]))
+    ).properties(
+        width=400,
+        height=400)
+
+    text = heatmap.mark_text().encode(
+        text='correlation_round',
+        color=alt.condition(
+            alt.datum.correlation > 0.5,
+            alt.value('black'),
+            alt.value('white')
+        )
+    )
+    
+    return heatmap + text
     
 def vif_bar_plot(x, y, df, thresh):
     """
