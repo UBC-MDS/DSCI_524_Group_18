@@ -1,31 +1,40 @@
 import pandas as pd
 
-def corr_matrix(df):
+def corr_matrix(df, decimals = 2):
     """Select all numeric variables and calculate
     Pearson correlation coefficient pairwise. The output
     of this function has all numeric variables as
     columns and rows and correlation coefficient
-    as each data point.
+    as each data point. (Melt down the matrix so that it
+    can be fit into altair plotting function)
     
     Parameters
     ----------
     df : pandas.DataFrame 
         The input data frame.
+    (decimals: int
+        The number of decimals in the output dataframe.)
 
     Returns
     -------
     pandas.DataFrame
-        A correlation matrix.
+        A (melted) correlation matrix (in which
+        variables are listed into two columns and 
+        correlation coefficient in the third column.
+        The fourth column is rounded coefficients with
+        designated decimals).
     
     Examples
     --------
     >>> from collinearity_tool.collinearity_tool import corr_matrix
     >>> corr_df = corr_matrix(df)
     """
-    numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
-    n_df = df.select_dtypes(include=numerics)
-    corr = n_df.corr()
-    return corr
+    
+    # corr_matrix = df.corr().stack().reset_index().rename(columns={0: 'correlation', 'level_0': 'variable', 'level_1': 'variable2'})
+    # corr_matrix["rounded_corr"] =  round(corr_matrix['correlation'], decimals)
+    corr_matrix = df.corr()
+    corr_matrix = round(corr_matrix['correlation'], decimals)
+    return corr_matrix
 
     
 def corr_heatmap(df):
