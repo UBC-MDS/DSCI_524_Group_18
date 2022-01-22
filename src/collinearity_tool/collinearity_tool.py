@@ -33,7 +33,8 @@ def corr_matrix(df, decimals = 2):
     eg_df = pd.DataFrame({'A': ['1'], 'B': ['2']}, columns=['A','B'])
     eg_df = eg_df.select_dtypes(include=numerics)
     
-    if df.select_dtypes(include=numerics) == eg_df:
+    if df.select_dtypes(include=numerics).columns.tolist() ==[]:
+        print("The input dataframe should contain at least one numeric variable.")
         return None
     elif isinstance(df, pd.DataFrame) == True:
         corr_matrix = df.corr().stack().reset_index().rename(columns={0: 'correlation', 'level_0': 'variable1', 'level_1': 'variable2'})
