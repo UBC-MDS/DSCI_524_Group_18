@@ -27,5 +27,5 @@ def test_corr_heatmap(heatmap):
     assert heatmap.layer[0].encoding.y.type == 'ordinal', "y-axis should be ordinal"
     assert heatmap.layer[0].encoding.color.type == 'quantitative', "color should be quantitative"
     assert heatmap.layer[1].mark == 'text', 'mark of label should be a text'
-    assert heatmap.layer[1].encoding.text.field == 'correlation_round', 'text should be mapped to the rounded correlation'
+    assert heatmap.layer[1].encoding.text.field == 'rounded_corr', 'text should be mapped to the rounded correlation'
     assert heatmap.layer[1].encoding.text.type == 'nominal', 'text should be nominal'

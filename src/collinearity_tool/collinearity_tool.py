@@ -26,7 +26,7 @@ def corr_matrix(df):
     """
 
     
-def corr_heatmap(df, response, scheme='blueorange'):
+def corr_heatmap(df, scheme='blueorange'):
     """Plot rectangular data as a color-encoded Pearson correlaiton matrix.
 
     The rows and the columns contain variable names, while the heatmap tiles 
@@ -36,8 +36,6 @@ def corr_heatmap(df, response, scheme='blueorange'):
     ----------
     df : pandas.DataFrame 
         2D dataset that can be coerced into an ndarray.
-    response: str
-        the column name of the response 
     scheme : str
         the diverging vega scheme from https://vega.github.io/vega/docs/schemes/#diverging
         the default is 'blueorange'
@@ -53,12 +51,9 @@ def corr_heatmap(df, response, scheme='blueorange'):
     >>> corr_heatmap(df)
     """
 
-    cor_data = df.drop(columns=response).corr().stack().reset_index().rename(
-        columns={'level_0': 'variable1', 'level_1': 'variable2', 0: 'correlation'})
-    cor_data['correlation_round'] = cor_data['correlation'].map(
-        '{:.2f}'.format)
+    corr_matrix_longer, corr_mat = corr_matrix(df)
 
-    heatmap = alt.Chart(cor_data).mark_rect().encode(
+    heatmap = alt.Chart(corr_matrix_longer).mark_rect().encode(
         x=alt.X('variable1:O', title=''),
         y=alt.Y('variable2:O', title=''),
         color=alt.Color('correlation:Q', scale=alt.Scale(
@@ -68,7 +63,7 @@ def corr_heatmap(df, response, scheme='blueorange'):
         height=400)
 
     text = heatmap.mark_text().encode(
-        text='correlation_round',
+        text='rounded_corr',
         color=alt.condition(
             alt.datum.correlation > 0.5,
             alt.value('black'),
