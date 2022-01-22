@@ -161,7 +161,7 @@ def vif_bar_plot(x, y, df, thresh):
     return [vif_df, vif_plot]
 
 
-  def col_identify(df, X, y, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
+def col_identify(df, X, y, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
     """Multicollinearity identification function highly correlated pairs 
     (Pearson coefficient) with VIF values exceeding the threshold.
     This function returns a DataFrame containing Pearson's coefficient,
