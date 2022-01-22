@@ -1,5 +1,5 @@
-from collinearity_tool import collinearity_tool
-from collinearity_tool.collinearity_tool vif_bar_plot
+from collinearity_tool.collinearity_tool import corr_matrix
+from collinearity_tool.collinearity_tool import vif_bar_plot
 
 import altair as alt
 import numpy as np
