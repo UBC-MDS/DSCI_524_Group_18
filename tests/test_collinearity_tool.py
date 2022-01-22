@@ -2,7 +2,7 @@ from collinearity_tool import collinearity_tool
 import pandas as pd
 
 
-def test_corr_longer():
+def test_corr_matrix():
     data_1 = {'A': [1,2,3,4,5],
         'B': [2,4,6,8,10],
         'C': [10,8,6,4,2],
@@ -17,7 +17,7 @@ def test_corr_longer():
           "rounded_corr": [1.00, 1.00, -1.00, 1.00, 1.00, -1.00, -1.00, -1.00, 1.00]
              }
     expected = pd.DataFrame(result, columns=["variable1","variable2","correlation", "rounded_corr"])
-    actual = corr_longer(df_1, decimals = 2)
+    actual = corr_matrix(df_1, decimals = 2)[0]
     assert actual.equals(expected) == True, "The correlation coefficient matrix is incorrect."
     
     data_2 = {'A': [1, 2],
@@ -31,7 +31,7 @@ def test_corr_longer():
           "rounded_corr": [1.00]
              }
     expected = pd.DataFrame(result, columns=["variable1","variable2","correlation", "rounded_corr"])
-    actual = corr_longer(df_2, decimals = 2)
+    actual = corr_matrix(df_2, decimals = 2)[0]
     assert actual.equals(expected) == True, "The correlation coefficient matrix should only return 1 row."
     
     data_3 = {'A': ['1', '2'],
@@ -39,5 +39,5 @@ def test_corr_longer():
              }
     df_3 = pd.DataFrame(data_2,columns=['A','B'])
     
-    actual = corr_longer(df_3, decimals = 2)
+    actual = corr_matrix(df_3, decimals = 2)[0]
     assert actual == None, "The correlation coefficient matrix should only return None."
