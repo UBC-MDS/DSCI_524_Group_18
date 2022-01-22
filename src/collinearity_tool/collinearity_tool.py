@@ -65,7 +65,7 @@ def vif_bar_plot(x, y, df, thresh):
         The response variable.
     df : pandas.DataFrame
         A dataframe containing the data.
-    thresh : int
+    thresh : int, float
         An integer specifying the threshold.
 
     Returns
@@ -84,8 +84,8 @@ def vif_bar_plot(x, y, df, thresh):
         raise ValueError("y must be a string!")
     if type(df) is not pd.DataFrame:
         raise ValueError("df must be a pandas data frame!")
-    if type(thresh) is not int:
-        raise ValueError("thresh must be an integer!")
+    if type(thresh) is not int and type(thresh) is not float:
+        raise ValueError("thresh must be an integer or a float!")
     
     # Data frame containing VIF scores
     explanatory_var = "+".join(set(x))
