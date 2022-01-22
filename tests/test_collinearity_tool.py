@@ -4,7 +4,13 @@ import pandas as pd
 
 def test_corr_matrix():
     """
-    docstring
+    Test if the correlation matrix returns the correct value and if it works
+    in some edge cases where the inputs only have one or no numeric variables.
+    3 tests in total.
+    
+    Examples
+    --------
+    >>> test_corr_matrix()
     """
     
     data_1 = {'A': [1,2,3,4,5],

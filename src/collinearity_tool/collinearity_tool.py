@@ -28,17 +28,18 @@ def corr_matrix(df, decimals = 2):
     """
     numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
     
+    if df is not pd.DataFrame:
+        raise ValueError("Please check if the input is a pandas dataframe!")
     if df.select_dtypes(include=numerics).columns.tolist() == []:
-        print("The input dataframe should contain at least one numeric variable.")
-        return None
-    elif isinstance(df, pd.DataFrame) == True:
-        corr_matrix_longer = df.corr().stack().reset_index().rename(columns={0: 'correlation', 'level_0': 'variable1', 'level_1': 'variable2'})
-        corr_matrix_longer["rounded_corr"] =  round(corr_matrix_longer['correlation'], decimals)
-        return (corr_matrix_longer, df.corr())
-    else:
-        print("Please check if the input is a pandas dataframe!")
+        raise ValueError("The input dataframe should contain at least one numeric variable.")
+    if type(decimals) is not int or decimals < 0:
+        raise ValueError("The number of decimals should be a positive integer.")
+    if df.shape[0] <= 1:
+        raise ValueError("The input dataframe should contain at least two observations.")
         
-    
+    corr_matrix_longer = df.corr().stack().reset_index().rename(columns={0: 'correlation', 'level_0': 'variable1', 'level_1': 'variable2'})
+    corr_matrix_longer["rounded_corr"] =  round(corr_matrix_longer['correlation'], decimals)
+    return (corr_matrix_longer, df.corr())
     
 
     
