@@ -24,7 +24,7 @@ def test_col_identify():
     assert col_df.columns.to_list() == ["variable", "pair", "correlation", "rounded_corr",
                              "vif_score", "eliminate"], "The following columns should be produced: variable, pair, correlation, rounded_corr, vif_score, eliminate"
 
-    col_df = round(col_df, 5)
+    col_df = round(col_df, 4)
 
     data = {"variable": ["cyl", "cty", "cty", "displ", "cyl"],
         "pair": ["cty | cyl", "cty | cyl", "cty | hwy", "cyl | displ", "cyl | displ"],
@@ -33,6 +33,6 @@ def test_col_identify():
         "vif_score": [8.0817, 3.0547, 3.0547, 7.9384, 8.0817],
         "eliminate": ["Yes", "No", "No", "Yes", "Yes"]}
 
-    test_df = round(pd.DataFrame(data), 5)
+    test_df = round(pd.DataFrame(data), 4)
 
     assert col_df.equals(test_df), "The test and real dataframes should be the same"
