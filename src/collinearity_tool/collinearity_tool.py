@@ -73,17 +73,13 @@ def vif_bar_plot(x, y, df, thresh):
     """
 
     
-def col_identify(corr_df, output_viff, corr_limit = 0.8, vif_limit = 4):
+def col_identify(corr_output, output_viff, corr_limit = 0.8, vif_limit = 4):
     """Multicollinearity identification function highly correlated pairs 
     (Pearson coefficient) with VIF values exceeding the threshold.
 
-    This function takes in correlated pairs from the correlation matrix pairs,
-    (for example, using corr_matrix()) function from this package.
-    It selects pairs with values exceeding a pre-determined value
-    (e.g. Pearson coefficient of 0.8). The user will be able to choose thresholds
-    or use the default thresholds.
-    It then checks VIF values from the VIF function output and suggests to 
-    remove the variable with the highest value from the correlated pair.
+    This function returns a DataFrame containing Pearson's coefficient,
+    VIFF, and the suggestion to eliminate or keep a variable based on 
+    VIFF and Pearson's coefficient thresholds.
 
     Parameters
     ----------
@@ -119,3 +115,26 @@ def col_identify(corr_df, output_viff, corr_limit = 0.8, vif_limit = 4):
     Elimination: var 1
 
     """
+    import pandas as pd
+
+    corr_long = corr_output.melt(
+        id_vars=['variable'], value_vars=col_names, var_name='variable_2', value_name='pearsons_coeff')
+    corr_filtered = pd.DataFrame(
+        corr_long[(corr_long.pearsons_coeff <= (-0.8)) | (corr_long.pearsons_coeff >= 0.8) & (corr_long.pearsons_coeff != 1)])
+
+    def pair_maker(x, y):
+        pairs = []
+        pairs.append(x)
+        pairs.append(y)
+        sorted_pairs = pairs.sort()
+        return pairs
+
+    corr_filtered['pairs'] = corr_filtered.apply(lambda x: pair_maker(x['variable'], x['variable_2']), axis=1)
+
+    results_df = corr_filtered.join(output_viff.set_index('variable'), on='variable', how='left')
+    results_df['eliminate'] = results_df['viff'].apply(lambda x: 'No' if x < 4 else 'Yes')
+    results_df.drop(columns=['variable_2'])
+    
+    return results_df
+
+
