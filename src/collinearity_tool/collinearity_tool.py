@@ -5,8 +5,7 @@ from patsy import dmatrices
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 import altair as alt
 
-
-def corr_matrix(df):
+def corr_matrix(df, decimals = 2):
     """Select all numeric variables and calculate
     Pearson correlation coefficient pairwise. The output
     of this function has all numeric variables as
@@ -28,7 +27,6 @@ def corr_matrix(df):
     >>> from collinearity_tool.collinearity_tool import corr_matrix
     >>> corr_df = corr_matrix(df)
     """
-
     
 def corr_heatmap(df):
     """Plot rectangular data as a color-encoded Pearson correlation matrix.
@@ -79,7 +77,6 @@ def vif_bar_plot(x, y, df, thresh):
     >>> from collinearity_tool.collinearity_tool vif_bar_plot
     >>> vif_bar_plot("response", ["exp1", "exp2", "exp3"], data, 5)
     """
-
     
 def col_identify(df, X, y, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
     """Multicollinearity identification function highly correlated pairs 
