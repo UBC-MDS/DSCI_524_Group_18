@@ -4,31 +4,50 @@ from patsy import dmatrices
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 import altair as alt
 
-def corr_matrix(df):
+def corr_matrix(df, decimals = 2):
     """Select all numeric variables and calculate
-    Pearson correlation coefficient pairwise. The output
-    of this function has all numeric variables as
-    columns and rows and correlation coefficient
-    as each data point.
+    Pearson correlation coefficient pairwise. User can
+    choose the generic matrix as output or the longer
+    form one.
     
     Parameters
     ----------
     df : pandas.DataFrame 
         The input data frame.
+    decimals: int
+        The number of decimals in the output dataframe.
 
     Returns
     -------
-    pandas.DataFrame
-        A correlation matrix.
+    tuple
+        The first element in the tuple is the longer form
+        of the correlation matrix and the second one is a 
+        generic correlation matrix.
     
     Examples
     --------
     >>> from collinearity_tool.collinearity_tool import corr_matrix
-    >>> corr_df = corr_matrix(df)
+    >>> corr_longer = corr_matrix(df, decimals = 3)[0]
+    >>> corr_matrix = corr_matrix(df, decimals = 3)[1]
     """
+    numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+    
+    if type(df) is not pd.DataFrame:
+        raise ValueError("Please check if the input is a pandas dataframe!")
+    if df.select_dtypes(include=numerics).columns.tolist() == []:
+        raise ValueError("The input dataframe should contain at least one numeric variable.")
+    if type(decimals) is not int or decimals < 0:
+        raise ValueError("The number of decimals should be a positive integer.")
+    if df.shape[0] <= 1:
+        raise ValueError("The input dataframe should contain at least two observations.")
+        
+    corr_matrix_longer = df.corr().stack().reset_index().rename(columns={0: 'correlation', 'level_0': 'variable1', 'level_1': 'variable2'})
+    corr_matrix_longer["rounded_corr"] =  round(corr_matrix_longer['correlation'], decimals)
+    return (corr_matrix_longer, df.corr())
+    
 
     
-def corr_heatmap(df):
+def corr_heatmap(df, scheme='blueorange'):
     """Plot rectangular data as a color-encoded Pearson correlaiton matrix.
 
     The rows and the columns contain variable names, while the heatmap tiles 
@@ -37,19 +56,43 @@ def corr_heatmap(df):
     Parameters
     ----------
     df : pandas.DataFrame 
-        2D dataset that can be coerced into an ndarray. The index/column information 
-        will be used to label the columns and rows.
+        2D dataset that can be coerced into an ndarray.
+    scheme : str
+        the diverging vega scheme from https://vega.github.io/vega/docs/schemes/#diverging
+        the default is 'blueorange'
 
     Returns
     -------
-    ax : matplotlib Axes
-        Axes object with the heatmap.
+    altair.LayerChart
+        A aitair chart with text layer
     
     Examples
     --------
     >>> from collinearity_tool.collinearity_tool import corr_heatmap
     >>> corr_heatmap(df)
     """
+
+    corr_matrix_longer, corr_mat = corr_matrix(df)
+
+    heatmap = alt.Chart(corr_matrix_longer).mark_rect().encode(
+        x=alt.X('variable1', type='nominal', title=''),
+        y=alt.Y('variable2', type='nominal', title=''),
+        color=alt.Color('correlation', type='quantitative', scale=alt.Scale(
+            scheme='blueorange', domain=[-1, 1]))
+    ).properties(
+        width=400,
+        height=400)
+
+    text = heatmap.mark_text().encode(
+        text='rounded_corr',
+        color=alt.condition(
+            alt.datum.correlation > 0.5,
+            alt.value('black'),
+            alt.value('white')
+        )
+    )
+    
+    return heatmap + text
     
 def vif_bar_plot(x, y, df, thresh):
     """
