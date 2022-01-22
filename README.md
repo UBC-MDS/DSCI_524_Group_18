@@ -7,7 +7,7 @@ Identify multicollinearity issues by correlation, VIF, and visualizations. This 
 ## Functions 
 
 The following four functions are in the collinearity_tool package:
-- `corr_longer`: A function that returns a correlation matrix for all numerical variables in a data frame.
+- `corr_matrix`: A function that returns a generic correlation matrix or a longer form one for all numerical variables in a data frame.
 - `corr_heatmap`: A function that returns a correlation heatmap given a dataframe.
 - `vif_bar_plot`: A function that returns a list containing a data frame for Variable Inflation Factors (VIF) and a bar chart of the VIFs for each explanatory variable in a multiple linear regression model.
 - `ol_identify`: A function that identifies multicollinearity based on highly correlated pairs (using Pearson coefficient) with VIF values exceeding the threshold.
