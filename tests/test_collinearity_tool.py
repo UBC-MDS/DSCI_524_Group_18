@@ -1,4 +1,5 @@
 from collinearity_tool.collinearity_tool import corr_matrix
+from collinearity_tool.collinearity_tool import corr_heatmap
 from collinearity_tool.collinearity_tool import vif_bar_plot
 
 import altair as alt
