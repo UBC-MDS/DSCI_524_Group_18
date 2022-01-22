@@ -1,3 +1,7 @@
+from unicodedata import numeric
+import pandas as pd
+
+
 def corr_matrix(df):
     """Select all numeric variables and calculate
     Pearson correlation coefficient pairwise. The output
@@ -73,7 +77,7 @@ def vif_bar_plot(x, y, df, thresh):
     """
 
     
-def col_identify(corr_output, output_viff, corr_limit = 0.8, vif_limit = 4):
+def col_identify(corr_output, vif_output, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
     """Multicollinearity identification function highly correlated pairs 
     (Pearson coefficient) with VIF values exceeding the threshold.
 
@@ -115,12 +119,23 @@ def col_identify(corr_output, output_viff, corr_limit = 0.8, vif_limit = 4):
     Elimination: var 1
 
     """
-    import pandas as pd
 
+    # Test input variables
+    assert type(corr_output) == pd.core.frame.DataFrame, "corr_output must be a matrix dataframe"
+    assert type(vif_output) == pd.core.frame.DataFrame, "vid_output must be a dataframe"
+    assert isinstance(corr_max, (int, float, complex)), "corr_max must be a number"
+    assert isinstance(corr_min, (int, float, complex)), "corr_min must be a number"
+    assert isinstance(vif_limit, (int, float, complex)), "vif_limit must be a number"
+    assert -1 <= corr_max <= 1, "corr_max must be between -1 and 1"
+    assert -1 <= corr_min <= 1, "corr_max must be between -1 and 1"
+    assert corr_max > corr_min, "corr_max must be larger than corr_min"
+
+
+    col_names = corr_output.columns.to_list()
     corr_long = corr_output.melt(
         id_vars=['variable'], value_vars=col_names, var_name='variable_2', value_name='pearsons_coeff')
     corr_filtered = pd.DataFrame(
-        corr_long[(corr_long.pearsons_coeff <= (-0.8)) | (corr_long.pearsons_coeff >= 0.8) & (corr_long.pearsons_coeff != 1)])
+        corr_long[(corr_long.pearsons_coeff <= (corr_min)) | (corr_long.pearsons_coeff >= corr_max) & (corr_long.pearsons_coeff != 1)])
 
     def pair_maker(x, y):
         pairs = []
@@ -131,10 +146,21 @@ def col_identify(corr_output, output_viff, corr_limit = 0.8, vif_limit = 4):
 
     corr_filtered['pairs'] = corr_filtered.apply(lambda x: pair_maker(x['variable'], x['variable_2']), axis=1)
 
-    results_df = corr_filtered.join(output_viff.set_index('variable'), on='variable', how='left')
-    results_df['eliminate'] = results_df['viff'].apply(lambda x: 'No' if x < 4 else 'Yes')
+    results_df = corr_filtered.join(vif_output.set_index('variable'), on='variable', how='left')
+    results_df['eliminate'] = results_df['vif'].apply(lambda x: 'No' if x <= vif_limit else 'Yes')
     results_df.drop(columns=['variable_2'])
     
+    # Test results dataframe
+    assert type(results_df) == pd.core.frame.DataFrame, "results_df must be a dataframe"
+
     return results_df
 
+# def my_test():
+#     """
+#     Test with toy_data
+#     """
+#     # test invalid handle
+#     with raises(TypeError) as e:
+#         col_identify(...)
+#     assert  == 
 
