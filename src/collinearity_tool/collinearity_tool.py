@@ -28,7 +28,7 @@ def corr_matrix(df, decimals = 2):
     """
     numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
     
-    if df is not pd.DataFrame:
+    if type(df) is not pd.DataFrame:
         raise ValueError("Please check if the input is a pandas dataframe!")
     if df.select_dtypes(include=numerics).columns.tolist() == []:
         raise ValueError("The input dataframe should contain at least one numeric variable.")
