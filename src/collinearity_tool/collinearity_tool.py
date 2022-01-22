@@ -29,12 +29,21 @@ def corr_matrix(df, decimals = 2):
     >>> from collinearity_tool.collinearity_tool import corr_matrix
     >>> corr_df = corr_matrix(df, decimals = 3)
     """
-    if isinstance(df, pd.DataFrame) == True:
+    numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+    eg_df = pd.DataFrame({'A': ['1'], 'B': ['2']}, columns=['A','B'])
+    eg_df = eg_df.select_dtypes(include=numerics)
+    
+    if df.select_dtypes(include=numerics) == eg_df:
+        return None
+    elif isinstance(df, pd.DataFrame) == True:
         corr_matrix = df.corr().stack().reset_index().rename(columns={0: 'correlation', 'level_0': 'variable1', 'level_1': 'variable2'})
         corr_matrix["rounded_corr"] =  round(corr_matrix['correlation'], decimals)
         return corr_matrix
     else:
         print("Please check if the input is a pandas dataframe!")
+        
+    
+    
 
     
 def corr_heatmap(df):
