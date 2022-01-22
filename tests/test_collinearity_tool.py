@@ -1,8 +1,12 @@
-from collinearity_tool import collinearity_tool
+from collinearity_tool.collinearity_tool import corr_matrix
 import pandas as pd
 
 
 def test_corr_matrix():
+    """
+    docstring
+    """
+    
     data_1 = {'A': [1,2,3,4,5],
         'B': [2,4,6,8,10],
         'C': [10,8,6,4,2],

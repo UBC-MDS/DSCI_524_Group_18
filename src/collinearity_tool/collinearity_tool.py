@@ -32,9 +32,9 @@ def corr_matrix(df, decimals = 2):
         print("The input dataframe should contain at least one numeric variable.")
         return None
     elif isinstance(df, pd.DataFrame) == True:
-        corr_matrix = df.corr().stack().reset_index().rename(columns={0: 'correlation', 'level_0': 'variable1', 'level_1': 'variable2'})
-        corr_matrix["rounded_corr"] =  round(corr_matrix['correlation'], decimals)
-        return (corr_matrix, df.corr())
+        corr_matrix_longer = df.corr().stack().reset_index().rename(columns={0: 'correlation', 'level_0': 'variable1', 'level_1': 'variable2'})
+        corr_matrix_longer["rounded_corr"] =  round(corr_matrix_longer['correlation'], decimals)
+        return (corr_matrix_longer, df.corr())
     else:
         print("Please check if the input is a pandas dataframe!")
         
