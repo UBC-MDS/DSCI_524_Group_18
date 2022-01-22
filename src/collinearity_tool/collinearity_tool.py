@@ -1,12 +1,12 @@
 import pandas as pd
 
-def corr_matrix(df, decimals = 2):
+def corr_longer(df, decimals = 2):
     """Select all numeric variables and calculate
     Pearson correlation coefficient pairwise. The output
     of this function has all numeric variables as
     columns and rows and correlation coefficient
     as each data point. (Melt down the matrix so that it
-    can be fit into altair plotting function)
+    can be fit into other functions in this package.)
     
     Parameters
     ----------
