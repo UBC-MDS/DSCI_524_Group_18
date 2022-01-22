@@ -54,9 +54,9 @@ def corr_heatmap(df, scheme='blueorange'):
     corr_matrix_longer, corr_mat = corr_matrix(df)
 
     heatmap = alt.Chart(corr_matrix_longer).mark_rect().encode(
-        x=alt.X('variable1:O', title=''),
-        y=alt.Y('variable2:O', title=''),
-        color=alt.Color('correlation:Q', scale=alt.Scale(
+        x=alt.X('variable1', type='nominal', title=''),
+        y=alt.Y('variable2', type='nominal', title=''),
+        color=alt.Color('correlation', type='quantitative', scale=alt.Scale(
             scheme='blueorange', domain=[-1, 1]))
     ).properties(
         width=400,
