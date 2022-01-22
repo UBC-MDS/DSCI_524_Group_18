@@ -3,7 +3,6 @@ import numpy as np
 from patsy import dmatrices
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 import altair as alt
-from unicodedata import numeric
 
 def corr_matrix(df, decimals = 2):
     """Select all numeric variables and calculate
