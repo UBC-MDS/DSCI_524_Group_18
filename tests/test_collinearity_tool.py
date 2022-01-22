@@ -1,10 +1,6 @@
-from collinearity_tool.collinearity_tool col_identify
+from collinearity_tool.collinearity_tool import col_identify
 
 import pandas as pd
-import numpy as np
-from patsy import dmatrices
-from statsmodels.stats.outliers_influence import variance_inflation_factor
-import altair as alt
 
 def test_col_identify():
     """

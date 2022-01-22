@@ -31,7 +31,7 @@ def corr_matrix(df):
 
     
 def corr_heatmap(df):
-    """Plot rectangular data as a color-encoded Pearson correlaiton matrix.
+    """Plot rectangular data as a color-encoded Pearson correlation matrix.
 
     The rows and the columns contain variable names, while the heatmap tiles 
     contain Pearson correlation coefficient and corresponding colours.
