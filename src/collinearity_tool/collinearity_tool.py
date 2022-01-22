@@ -1,5 +1,9 @@
 from unicodedata import numeric
 import pandas as pd
+import numpy as np
+from patsy import dmatrices
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+import altair as alt
 
 
 def corr_matrix(df):
@@ -171,7 +175,7 @@ def col_identify(df, X, y, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
     results_df = results_df.drop(columns=['variable2']).rename(columns={'variable1': 'variable'})
     results_df = results_df[['variable', 'pair', 'correlation', 'rounded_corr',
                              'vif_score', 'eliminate']]
-    results_df = results_df.sort_values('pair')
+    results_df = results_df.sort_values('pair').reset_index(drop='True')
 
     return results_df
 
