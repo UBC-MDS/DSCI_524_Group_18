@@ -2,7 +2,7 @@
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-SPHINXBUILD   = python3 -msphinx
+SPHINXBUILD   = python -msphinx
 SPHINXPROJ    = collinearity_tool
 SOURCEDIR     = .
 BUILDDIR      = _build
