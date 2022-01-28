@@ -45,7 +45,18 @@ $ pip install git+https://github.com/UBC-MDS/collinearity_tool.git
 
 ## 3. Usage
 
-- TODO
+`collinearity` can be used to  identify multicollinearity issues by correlation, VIF, and visualizations as follows:
+
+```python
+import pandas as pd
+import collinearity_tool.collinearity_tool as cl
+
+data = pd.read_csv('test.csv') # path to your file
+cl.corr_matrix(data)
+cl.corr_heatmap(data)
+vif = cl.vif_bar_plot(x, y, data, 6) # x and y are the choice of the variables
+cl.col_identify(data, x, y)
+```
 
 ## 4. Contributors
 - Anahita Einolghozati
