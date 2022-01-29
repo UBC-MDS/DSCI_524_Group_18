@@ -40,7 +40,7 @@ _Altair_ is a popular plotting package. It provides the necessary tools to creat
 ## 2. Installation
 
 ```bash
-$ pip install git+https://github.com/UBC-MDS/collinearity_tool.git
+$ pip install collinearity_tool
 ```
 
 ## 3. Usage
