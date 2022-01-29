@@ -216,7 +216,8 @@ def col_identify(df, X, y, vif_limit = 4, corr_min = -0.8, corr_max = 0.8):
         
     col_names = X
     filt_df = df[col_names]
-
+    
+    # Using another function for output
     input_corr = corr_matrix(filt_df)[0]
 
     corr_filtered = pd.DataFrame(
