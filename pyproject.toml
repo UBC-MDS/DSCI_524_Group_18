@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "collinearity_tool"
-version = "0.1.5"
+version = "0.1.6"
 description = "Identify multicollinearity issues by correlation, VIF, and visualizations."
 authors = ["Anahita Einolghozati, Chaoran Wang, Katia Aristova, Lisheng Mao"]
 license = "MIT"
