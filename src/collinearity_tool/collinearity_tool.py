@@ -187,9 +187,10 @@ def col_identify(df, X, y, vif_limit = 4, corr_min = -0.8, corr_max = 0.8):
     Returns
     -------
     Pandas DataFrame
-        A dataframe containing the following columns:
+        A dataframe containing variables for elimination
+        with the following columns:
         'variable', 'pair', 'correlation', 'rounded_corr',
-        'vif_score', 'eliminate'
+        'vif_score''
     Examples
     --------
     >>> from collinearity_tool.collinearity_tool import co_identify
@@ -246,6 +247,7 @@ def col_identify(df, X, y, vif_limit = 4, corr_min = -0.8, corr_max = 0.8):
         columns={'explanatory_var': 'variable1'})
 
     results_df = corr_filtered.join(vif_output.set_index('variable1'), on='variable1', how='inner')
+    results_df = results_df.loc[(results_df['vif_score'] >= vif_limit)]
     results_df = results_df.drop(columns=['variable2']).rename(columns={'variable1': 'variable'})
     results_df = results_df[['variable', 'pair', 'correlation', 'rounded_corr',
                              'vif_score']]
