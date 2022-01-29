@@ -161,7 +161,7 @@ def vif_bar_plot(x, y, df, thresh):
     return [vif_df, vif_plot]
 
 
-def col_identify(df, X, y, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
+def col_identify(df, X, y, vif_limit = 4, corr_min = -0.8, corr_max = 0.8):
     """Multicollinearity identification function highly correlated pairs 
     (Pearson coefficient) with VIF values exceeding the threshold.
     This function returns a DataFrame containing Pearson's coefficient,
@@ -187,9 +187,10 @@ def col_identify(df, X, y, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
     Returns
     -------
     Pandas DataFrame
-        A dataframe containing the following columns:
+        A dataframe containing variables for elimination
+        with the following columns:
         'variable', 'pair', 'correlation', 'rounded_corr',
-        'vif_score', 'eliminate'
+        'vif_score''
     Examples
     --------
     >>> from collinearity_tool.collinearity_tool import co_identify
@@ -212,11 +213,11 @@ def col_identify(df, X, y, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
         raise ValueError("corr_min must be between -1 and 1")
     if corr_max < corr_min:
         raise ValueError("corr_max must be larger than corr_min")
+        
+    col_names = X
+    filt_df = df[col_names]
 
-    col_names = X + [y]
-    df = df[col_names]
-
-    input_corr = corr_matrix(df)[0]
+    input_corr = corr_matrix(filt_df)[0]
 
     corr_filtered = pd.DataFrame(
         input_corr[(
@@ -224,15 +225,15 @@ def col_identify(df, X, y, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
             input_corr.correlation >= corr_max) & (
             input_corr.variable1 != input_corr.variable2)])
 
-    def pair_maker(x, y):
+    def pair_maker(v1, v2):
         """
         Allows to create pairs from two columns
         """
-        if type(x) is not str:
-            x = str(x)
+        if type(v1) is not str:
+            v1 = str(v1)
         if type(y) is not str:
-            y = str(y)
-        pairs = [x, y]
+            v2 = str(v2)
+        pairs = [v1, v2]
         pairs.sort()
         str_pairs = ' | '.join(pairs)
         return str_pairs
@@ -240,16 +241,17 @@ def col_identify(df, X, y, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
     corr_filtered['pair'] = corr_filtered.apply(
         lambda x: pair_maker(x['variable1'], x['variable2']), axis=1)
 
-    vif_output = vif_bar_plot(X, y, df, 3)[0]
+    vif_output = vif_bar_plot(X, y, df, 4)[0]
     vif_output = pd.DataFrame(
         vif_output[(vif_output.explanatory_var != 'Intercept')]).rename(
         columns={'explanatory_var': 'variable1'})
 
     results_df = corr_filtered.join(vif_output.set_index('variable1'), on='variable1', how='inner')
-    results_df['eliminate'] = results_df['vif_score'].apply(lambda x: 'No' if x <= vif_limit else 'Yes')
+    results_df = results_df.loc[(results_df['vif_score'] >= vif_limit)]
     results_df = results_df.drop(columns=['variable2']).rename(columns={'variable1': 'variable'})
     results_df = results_df[['variable', 'pair', 'correlation', 'rounded_corr',
-                             'vif_score', 'eliminate']]
-    results_df = results_df.sort_values('pair').reset_index(drop='True')
+                             'vif_score']]
+    results_df = results_df.sort_values('pair')
+    results_df = results_df.sort_values('vif_score', ascending=False).drop_duplicates(['pair']).reset_index(drop='True')
 
     return results_df

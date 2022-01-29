@@ -146,26 +146,25 @@ def test_col_identify():
     >>> test_col_identify()
     """
 
-    cars = pd.read_csv("https://raw.githubusercontent.com/tidyverse/ggplot2/main/data-raw/mpg.csv")
-    exp_list = ["displ", "year", "cyl", "cty"]
-    resp_y = "hwy"
+    df = pd.read_csv("https://raw.githubusercontent.com/tidyverse/ggplot2/main/data-raw/mpg.csv")
+    X = ["displ", "year", "cyl", "cty"]
+    y = "hwy"
 
-    col_df = col_identify(cars, exp_list, resp_y)
+    col_df = col_identify(df, X, y)
 
     # output and its properties
     assert type(col_df) == pd.DataFrame, "The output should be a Pandas DataFrame"
-    assert col_df.shape[1] == 6, "The output should contain 6 columns"
+    assert col_df.shape[1] == 5, "The output should contain 6 columns"
     assert col_df.columns.to_list() == ["variable", "pair", "correlation", "rounded_corr",
-                             "vif_score", "eliminate"], "The following columns should be produced: variable, pair, correlation, rounded_corr, vif_score, eliminate"
+                             "vif_score"], "The following columns should be produced: variable, pair, correlation, rounded_corr, vif_score, eliminate"
 
     col_df = round(col_df, 4)
 
-    data = {"variable": ["cyl", "cty", "cty", "displ", "cyl"],
-        "pair": ["cty | cyl", "cty | cyl", "cty | hwy", "cyl | displ", "cyl | displ"],
-        "correlation": [-0.8058, -0.8058, 0.9559, 0.9302, 0.9302],
-        "rounded_corr": [-0.81, -0.81, 0.96, 0.93, 0.93],
-        "vif_score": [8.0817, 3.0547, 3.0547, 7.9384, 8.0817],
-        "eliminate": ["Yes", "No", "No", "Yes", "Yes"]}
+    data = {"variable": ['cyl', 'cyl'],
+        "pair": ['cty | cyl', 'cyl | displ'],
+        "correlation": [-0.8058, 0.9302],
+        "rounded_corr": [-0.81, 0.93],
+        "vif_score": [8.0817, 8.0817]}
 
     test_df = round(pd.DataFrame(data), 4)
 
