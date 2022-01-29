@@ -62,7 +62,7 @@ jobs:
     - uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
-        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        password: ${{ secrets.pypi-AgENdGVzdC5weXBpLm9yZwIkYjVhNDViYjYtZjU0NC00YjRhLTkwYzQtNTI1Y2RmOTg5YTk4AAIleyJwZXJtaXNzaW9ucyI6ICJ1c2VyIiwgInZlcnNpb24iOiAxfQAABiBZsZzifEcMMt2thFmboHH0CoCYOFNQJGFh6Nujmn4B4g}}
         repository_url: https://test.pypi.org/legacy/
         skip_existing: true
     # Step 6. Test install from TestPyPI
@@ -76,5 +76,5 @@ jobs:
     - uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
+        password: ${{ secrets.pypi-AgEIcHlwaS5vcmcCJDcxOWZkYzY3LTIwMjgtNGNmNC1hOTFhLTNkODg5OTA0NzJjNwACJXsicGVybWlzc2lvbnMiOiAidXNlciIsICJ2ZXJzaW9uIjogMX0AAAYggwVUT7fpqvLnbrtSLwN9koWckoTq7OqCec1WaW-HPvE}}
         skip_existing: true
