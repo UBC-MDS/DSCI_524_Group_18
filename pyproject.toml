@@ -5,6 +5,9 @@ description = "Identify multicollinearity issues by correlation, VIF, and visual
 authors = ["Anahita Einolghozati, Chaoran Wang, Katia Aristova, Lisheng Mao"]
 license = "MIT"
 readme = "README.md"
+homepage = "https://github.com/UBC-MDS/collinearity_tool"
+repository = "https://github.com/UBC-MDS/collinearity_tool"
+documentation = 'https://collinearity_tool.readthedocs.io'
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -22,7 +25,18 @@ sphinx-autoapi = "^1.8.4"
 sphinx-rtd-theme = "^1.0.0"
 pytest-cov = "^3.0.0"
 codecov = "^2.1.12"
+python-semantic-release = "^7.24.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.semantic_release]
+version_variable = "pyproject.toml:version" 
+branch = "main"                            
+changelog_file = "CHANGELOG.md"            
+build_command = "pip install poetry && poetry build"  
+dist_path = "dist/"                         
+upload_to_pypi = false                      
+remove_dist = false                         
+patch_without_tag = "true"                  
