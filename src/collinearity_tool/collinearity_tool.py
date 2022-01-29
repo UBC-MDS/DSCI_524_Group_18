@@ -251,5 +251,7 @@ def col_identify(df, X, y, corr_min = -0.8, corr_max = 0.8, vif_limit = 4):
     results_df = results_df[['variable', 'pair', 'correlation', 'rounded_corr',
                              'vif_score', 'eliminate']]
     results_df = results_df.sort_values('pair').reset_index(drop='True')
+    results_df = results_df.sort_values('vif_score', ascending=False).drop_duplicates(['pair'])
+
 
     return results_df
